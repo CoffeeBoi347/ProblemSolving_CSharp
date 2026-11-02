@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tantya.Utils
 {
-    public class HoltForecaster : MonoBehaviour
+    public class HoltForecaster 
     {
         private readonly float alpha;
         private readonly float beta;
@@ -19,6 +20,18 @@ namespace Tantya.Utils
 
         public HoltForecaster(float alpha, float beta)
         {
+            if (alpha < 0f || alpha > 1f)
+                throw new ArgumentOutOfRangeException(
+                    nameof(alpha), "Alpha must be between 0 and 1.");
+
+            if (beta < 0f || beta > 1f)
+                throw new ArgumentOutOfRangeException(
+                    nameof(beta), "Beta must be between 0 and 1.");
+
+            if (alpha + beta > 1f)
+                throw new ArgumentException(
+                    "Alpha + Beta cannot exceed 1.");
+
             this.alpha = Mathf.Clamp01(alpha);
             this.beta = Mathf.Clamp01(beta);
         }
@@ -56,6 +69,14 @@ namespace Tantya.Utils
 
             var forecast = level + stepsAhead * trend;
             return Mathf.Max(0f, forecast);
+        }
+
+        public void Reset()
+        {
+            level = 0f;
+            trend = 0f;
+            initialized = false;
+            observationCount = 0;
         }
     }
 }
