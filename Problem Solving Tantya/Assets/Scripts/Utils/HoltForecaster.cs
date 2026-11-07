@@ -67,7 +67,7 @@ namespace Tantya.Utils
             if (!initialized || stepsAhead < 1)
                 return 0f;
 
-            var forecast = level + stepsAhead * trend;
+            var forecast = level + stepsAhead * trend; // lT + h * tT
             return Mathf.Max(0f, forecast);
         }
 
